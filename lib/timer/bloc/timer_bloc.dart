@@ -17,7 +17,9 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
     : _ticker = ticker,
       super(TimerInitial(_duration)) {
     on<TimerStarted>(_onStarted);
-    on<_TimerTicked>(_onPaused);
+    on<TimerPaused>(_onPaused);
+    on<TimerResumed>(_onResumed);
+    on<TimerReset>(_onReset);
     on<_TimerTicked>(_onTicked);
   }
 
@@ -37,6 +39,23 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
         .listen(
           (duration) => add(_TimerTicked(duration: duration)),
         ); //ouve o ticker com a duranção e adiciona o eve nto de tick
+  }
+
+  //lidando com o evento de resetar o timer
+  void _onReset(TimerReset reset, Emitter<TimerState> emit) {
+    _tickerSubscription?.cancel(); //cancela o timer
+    emit(const TimerInitial(_duration)); //volta pro estado inicial
+  }
+
+  //lidando com o evento de voltar a contar
+  void _onResumed(TimerResumed resume, Emitter<TimerState> emit) {
+    if (state is TimerRunPause) {
+      // se esta no estado de pausa
+      _tickerSubscription?.resume(); //volta
+      emit(
+        TimerRunInProgress(state.duration),
+      ); //e atualiza pro status de rodando
+    }
   }
 
   //lidando com o evento de pausado
