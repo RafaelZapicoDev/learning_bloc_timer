@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:learning_bloc_timer/app.dart';
+import 'package:learning_bloc_timer/ticker.dart';
 
 part 'timer_event.dart';
 part 'timer_state.dart';
@@ -15,7 +15,9 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 
   TimerBloc({required Ticker ticker}) //ao construir o bloc passa o ticker
     : _ticker = ticker,
-      super(TimerInitial(_duration)) {
+      super(TimerInitial(_duration)) //definindo o estado inicial do bloc
+      {
+    //registrando como o bloc deve reagir aos eventos
     on<TimerStarted>(_onStarted);
     on<TimerPaused>(_onPaused);
     on<TimerResumed>(_onResumed);

@@ -1,10 +1,19 @@
-//essa classe vai retornar os ticks a cada 1 segundos
-class Ticker {
-  const Ticker();
-  Stream<int> tick({required int ticks}) {
-    return Stream.periodic(
-      const Duration(seconds: 1),
-      (x) => ticks - x - 1,
-    ).take(ticks);
+import 'package:flutter/material.dart';
+import 'package:learning_bloc_timer/timer/view/timer_page.dart';
+
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Timer',
+      theme: ThemeData(
+        colorScheme: const ColorScheme.light(
+          primary: Color.fromRGBO(72, 74, 126, 1),
+        ),
+      ),
+      home: const TimerPage(),
+    );
   }
 }
